@@ -2,22 +2,26 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { addTodo } from '../actions'
 
-let AddTodo = ({ dispatch }) => {
+let AddTodo = (store) => {
     let input;
+
+    const onSubmit = e => {
+        e.preventDefault();
+        if (!input.value.trim()) {
+            return;
+        }
+        store.dispatch(addTodo(input.value));
+        input.value = '';
+    };
+
+    const onRef = node => {
+        input = node;
+    };
 
     return (
         <div>
-            <form onSubmit={e => {
-                e.preventDefault();
-                if (!input.value.trim()) {
-                    return
-                }
-                dispatch(addTodo(input.value));
-                input.value = ''
-            }}>
-                <input ref={node => {
-                    input = node
-                }} />
+            <form onSubmit={onSubmit}>
+                <input ref={onRef} />
                 <button type="submit">
                     Add Todo
                 </button>
